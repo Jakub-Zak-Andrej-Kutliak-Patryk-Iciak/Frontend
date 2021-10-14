@@ -1,0 +1,18 @@
+.btn,
+.disabledBtn {
+    border-radius: 7px;
+    transition: 0.3s all;
+}
+
+.btn:active,
+.btn:disabled {
+    transform: scale(0.98);
+}
+
+.disabledBtn {
+    opacity: 0.4;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}

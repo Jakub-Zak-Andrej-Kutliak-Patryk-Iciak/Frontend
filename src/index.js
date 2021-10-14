@@ -1,13 +1,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import 'semantic-ui-css/semantic.min.css'
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { ToastProvider } from "react-toast-notifications";
+import { BrowserRouter } from "react-router-dom";
+
+const RenderApp = () => {
+  const accountRoutes = require('./routes/account').default()
+  const routes = require('./routes/index').default()
+
+  return (
+    <React.StrictMode>
+      <ToastProvider>
+        <BrowserRouter>
+          <App routes={ routes } accountRoutes={accountRoutes}/>
+        </BrowserRouter>
+      </ToastProvider>
+    </React.StrictMode>
+  )
+}
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <RenderApp/>,
   document.getElementById('root')
 );
 

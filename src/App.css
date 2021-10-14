@@ -1,7 +1,35 @@
 .App {
   text-align: center;
+  overflow: hidden;
+  background: rgb(34,193,195);
+  background: -moz-linear-gradient(35deg, rgba(34,193,195,1) 0%, rgba(255,255,255,1) 40%, rgba(255,255,255,1) 60%, rgba(255,187,40,1) 100%);
+  background: -webkit-linear-gradient(35deg, rgba(34,193,195,1) 0%, rgba(255,255,255,1) 40%, rgba(255,255,255,1) 60%, rgba(255,187,40,1) 100%);
+  background: linear-gradient(35deg, rgba(34,193,195,1) 0%, rgba(255,255,255,1) 40%, rgba(255,255,255,1) 60%, rgba(255,187,40,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#22c1c3",endColorstr="#ffbb28",GradientType=1);
+  min-height: 100vh;
+  color: white;
 }
 
+.center-col,
+.center-row,
+.make-row-align-start {
+  display: flex;
+  align-items: center;
+}
+
+.row-align-start {
+  justify-content: start;
+}
+
+.center-col,
+.center-row {
+  justify-content: center;
+}
+.center-col {
+  flex-direction: column;
+}
+
+.App-logo-still,
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -13,19 +41,8 @@
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
+.fullscreen-view {
 
-.App-link {
-  color: #61dafb;
 }
 
 @keyframes App-logo-spin {
