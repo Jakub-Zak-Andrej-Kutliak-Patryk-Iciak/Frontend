@@ -1,12 +1,12 @@
 import { Switch, Route } from 'react-router-dom'
-import ChooseLoginMethod from "../pages/login/ChooseLoginMethod";
 import Dashboard from "../pages/dashboard/Dashboard";
+import CompleteAccountPage from "../pages/account/complete/CompleteAccountPage";
 
 
 const AccountRoutes = () => (
   <Switch>
-    <Route path="/account/" component={() => <ChooseLoginMethod/>} />
-    <Route path="/" component={() => <Dashboard/>} />
+    <Route path="/account/complete" component={() => <CompleteAccountPage />} />
+    <Route path="/account" component={() => <Dashboard/>} />
   </Switch>
 )
 

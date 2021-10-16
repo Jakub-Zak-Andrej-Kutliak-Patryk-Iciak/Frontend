@@ -3,16 +3,12 @@ import { getAuth, getRedirectResult, GoogleAuthProvider, FacebookAuthProvider, s
 import { initializeApp } from "firebase/app";
 import useScreenSizeService from "./useScreenSizeService";
 import useEnvService from "./useEnvService";
-import { useToasts } from "react-toast-notifications";
 import { securedAPI } from "./useApiService";
-import useTokenAuth from "./useTokenAuth";
 
 
-const useProviderLogin = () => {
+const useLoginService = ({ addToast, setToken }) => {
   const [isLoading, setLoading] = useState(false)
   const { isMobile } = useScreenSizeService()
-  const { addToast } = useToasts()
-  const { setToken } = useTokenAuth({ addToast })
   const { firebaseConfig } = useEnvService()
 
   useEffect(() => {
@@ -23,10 +19,16 @@ const useProviderLogin = () => {
 
   const onSuccessCallback = async (result) => {
     const { user, _tokenResponse: other, providerId, ...rest } = result
-    const credential = await GoogleAuthProvider.credentialFromResult(result);
-    console.log('user', user)
-    console.log('tokenResponse', other)
-    console.log('tokenResponse', rest)
+
+    let credential;
+    if (providerId.indexOf("google") !== -1) {
+      credential = await GoogleAuthProvider.credentialFromResult(result);
+    } else {
+      credential = await FacebookAuthProvider.credentialFromResult(result);
+    }
+    // console.log('user', user)
+    // console.log('tokenResponse', other)
+    // console.log('tokenResponse', rest)
 
     await securedAPI.signIn({
       providerId: other.providerId,
@@ -36,6 +38,14 @@ const useProviderLogin = () => {
       email: user.email,
       photoUrl: user.photoURL,
       accessToken: credential.accessToken,
+    }).then(({ ok, data: { token } }) => {
+      if (ok && token) {
+        setToken(token)
+      } else {
+        onErrorCallback({ message: "Sign in failed" })
+      }
+    }).catch(error => {
+        onErrorCallback(error)
     })
   }
   const onErrorCallback = (error) => {
@@ -63,7 +73,7 @@ const useProviderLogin = () => {
   const signInWithProvider = async (provider) => {
     setLoading(true)
     return signInAccordingToScreenSize(provider)
-      .then(onSuccessCallback)
+      .then((result) => onSuccessCallback(result, provider))
       .catch(onErrorCallback)
       .finally(() => setLoading(false));
   }
@@ -78,6 +88,9 @@ const useProviderLogin = () => {
       .then(({ token }) => {
         if (token) {
           setToken(token)
+            .then(decoded => {
+              console.log('credential login got decoded', decoded)
+            })
         }
       }).finally(() => {
         setLoading(false)
@@ -107,4 +120,4 @@ const useProviderLogin = () => {
   }
 }
 
-export default useProviderLogin
+export default useLoginService

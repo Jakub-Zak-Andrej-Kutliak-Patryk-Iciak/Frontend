@@ -1,10 +1,15 @@
+import { Route, Switch } from "react-router-dom";
+import CompleteAccountPage from "../account/complete/CompleteAccountPage";
 
 
 const Dashboard = () => {
 
   return (
     <div className="px-3 uppercase">
-      Hey there, dashboard here
+      <Switch>
+        <Route path={"/account/complete"} component={() => <CompleteAccountPage />} />
+        {/*<Route path={""} component={}/>*/}
+      </Switch>
     </div>
   )
 }

@@ -14,4 +14,4 @@ export const minLength = min => value => value && value.length < min ? messages.
 export const maxLength = max => value => value && value.length > max ? messages.maxLength(max) : undefined
 export const email = value => value && !/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value) ? messages.email : undefined
 export const password = value => value ? undefined : messages.password
-export const birthday = value => value ? messages.birthday : undefined
+export const birthday = value => value && !/(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d/.test(value) ? messages.birthday : undefined

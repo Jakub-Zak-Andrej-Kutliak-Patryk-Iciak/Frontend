@@ -24,14 +24,14 @@ const create = (baseURL) => {
       ...customHeaders,
       'Content-Type': 'application/json',
       'Accept-Language': "en",
-      'Authorization': `Bearer ${getStateItem("token")}`
+      'Authorization': `Bearer ${getStateItem("auth.token")}`
     }
   })
   const getMultipartApiHeaders = () => ({
     headers: {
       'Content-Type': 'multipart/form-data',
       'Accept-Language': "en",
-      'Authorization': `Bearer ${getStateItem("token")}`
+      'Authorization': `Bearer ${getStateItem("auth.token")}`
     }
   })
   const getUnsecuredHeaders = () => ({
@@ -60,7 +60,7 @@ const create = (baseURL) => {
 
 const __DEV__ = process.env.NODE_ENV !== 'production'
 
-export const getApiBaseUrl = () => __DEV__ ? 'http://localhost:3210/' : '/'
+export const getApiBaseUrl = () => __DEV__ ? 'http://localhost:3000/' : '/'
 
 export const securedAPI = create(`${getApiBaseUrl()}`)
 export const unsecuredAPI = create(`${getApiBaseUrl()}v1/`)

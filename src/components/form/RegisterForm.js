@@ -49,7 +49,6 @@ const RegisterForm = ({ onSubmit }) => {
                          }
                        } }
             />
-
             <InputHook name="lastName"
                        label="Last name"
                        rules={ {

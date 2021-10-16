@@ -14,6 +14,7 @@ export const InputHook = ({
                             onBlur = () => {},
                             defaultValue,
                             type = "text",
+                            style = {}
                           }) => {
   const { control, clearErrors, formState: { errors } } = useFormContext()
   const getError = () => errors[name]
@@ -31,6 +32,7 @@ export const InputHook = ({
                     <Input value={ field.value }
                            autoComplete='off'
                            placeholder={ placeholder }
+                           style={style}
                            onChange={ (event) => {
                              field.onChange(event)
                              onChange(event, event.target)
@@ -70,4 +72,5 @@ InputHook.propTypes = {
   onBlur: PropTypes.func,
   defaultValue: PropTypes.string,
   type: PropTypes.string,
+  style: PropTypes.object,
 }

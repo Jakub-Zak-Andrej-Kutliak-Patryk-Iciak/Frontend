@@ -2,12 +2,23 @@ import './App.css';
 import PropTypes from 'prop-types'
 import ConnectivityListener from "./services/useConnectionService";
 import { Helmet } from "react-helmet";
-import useTokenAuth from "./services/useTokenAuth";
-import { useToasts } from 'react-toast-notifications';
+import { useStore } from "./store/StoreProvider";
+import { useEffect } from "react";
+import { useHistory, useLocation } from "react-router-dom";
+
 
 const App = ({ accountRoutes, routes }) => {
-  const { addToast } = useToasts()
-  const { token } = useTokenAuth({ addToast })
+  const { push } = useHistory()
+  const { pathname } = useLocation()
+  const { user, store } = useStore()
+
+  useEffect(() => {
+    if (pathname.startsWith("/login") && store?.auth?.token) {
+      if (user) {
+        push(user.isProfileComplete ? "/":"/account/complete")
+      }
+    }
+  }, [user, store, push, pathname])
 
   return (
     <div className="App center-col">
@@ -19,7 +30,7 @@ const App = ({ accountRoutes, routes }) => {
       >
         <meta charSet='utf-8'/>
       </Helmet>
-      { token ? accountRoutes : routes }
+      { user ? accountRoutes : routes }
     </div>
   );
 }

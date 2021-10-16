@@ -6,18 +6,18 @@ const saveState = (state) => {
   return loadState()
 }
 
-const loadState = () => {
-  const initState = {
-    // don't forget to increment storeVersion everytime you make a change here
-    version: storeVersion,
-    auth: {
-      token: null,
-    },
-    preferences: {
-      darkmode: false,
-    },
-  }
+export const initState = {
+  // don't forget to increment storeVersion everytime you make a change here
+  version: storeVersion,
+  auth: {
+    token: null,
+  },
+  preferences: {
+    darkmode: false,
+  },
+}
 
+const loadState = () => {
   const store = localStorage.getItem(storeName)
   if (store) {
     const parsedStore = JSON.parse(store)
@@ -45,7 +45,7 @@ class ObjectCrawler {
 }
 
 
-export const getStateItem = (path, instead) => {
+export const getStateItem = (path = "", instead) => {
   const temp = ObjectCrawler.crawl(path, loadState())
   return (!temp && instead) ? instead : temp
 }
@@ -56,7 +56,6 @@ export const setStateItem = (path, value) => {
   const propRef = ObjectCrawler.crawl(parsedPath.join("."), state)
   propRef[propName] = value
   saveState(state)
-  return value
+  return state
 }
-
 

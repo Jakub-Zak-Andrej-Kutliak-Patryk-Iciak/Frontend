@@ -6,6 +6,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ToastProvider } from "react-toast-notifications";
 import { BrowserRouter } from "react-router-dom";
+import StoreProvider from "./store/StoreProvider";
 
 const RenderApp = () => {
   const accountRoutes = require('./routes/account').default()
@@ -15,7 +16,9 @@ const RenderApp = () => {
     <React.StrictMode>
       <ToastProvider>
         <BrowserRouter>
-          <App routes={ routes } accountRoutes={accountRoutes}/>
+          <StoreProvider>
+            <App routes={ routes } accountRoutes={accountRoutes}/>
+          </StoreProvider>
         </BrowserRouter>
       </ToastProvider>
     </React.StrictMode>

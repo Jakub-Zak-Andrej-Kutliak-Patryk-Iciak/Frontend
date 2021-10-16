@@ -1,14 +1,18 @@
 import { Route, Switch, useHistory } from "react-router-dom";
 import logo from "../../logo.svg";
-import useLoginService from "../../services/useProviderLogin";
+import useLoginService from "../../services/useLoginService";
 import LoginWithCredentials from "./LoginWithCredentials";
 import ChooseLoginMethod from "./ChooseLoginMethod";
 import RegisterPage from "../register/RegisterPage";
 import { AppLink } from "../../components";
 import { LeftBackArrowIcon } from "../../components/icons";
+import { useToasts } from "react-toast-notifications";
+import { useStore } from "../../store/StoreProvider";
 
 
 const LoginPage = () => {
+  const { addToast } = useToasts()
+  const { setStoreItem } = useStore()
   const {
     isLoading,
     signInWithGoogle,
@@ -16,7 +20,7 @@ const LoginPage = () => {
     signInWithCredentials,
     signInAsGuest,
     registerWithCredentials
-  } = useLoginService()
+  } = useLoginService({ addToast, setToken: (token) => setStoreItem("auth.token", token) })
   const { push } = useHistory()
 
   return (
