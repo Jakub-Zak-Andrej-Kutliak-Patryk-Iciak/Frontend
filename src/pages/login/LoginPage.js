@@ -8,6 +8,7 @@ import { AppLink } from "../../components";
 import { LeftBackArrowIcon } from "../../components/icons";
 import { useToasts } from "react-toast-notifications";
 import { useStore } from "../../store/StoreProvider";
+import CompleteAccountPage from "./CompleteAccountPage";
 
 
 const LoginPage = () => {
@@ -19,7 +20,8 @@ const LoginPage = () => {
     signInWithFacebook,
     signInWithCredentials,
     signInAsGuest,
-    registerWithCredentials
+    registerWithCredentials,
+    completeAccount
   } = useLoginService({ addToast, setToken: (token) => setStoreItem("auth.token", token) })
   const { push } = useHistory()
 
@@ -40,6 +42,7 @@ const LoginPage = () => {
         />
         <Route path="/login/register"
                component={ () => <RegisterPage registerWithCredentials={ registerWithCredentials }/> }/>
+        <Route path="/login/register/complete" component={ () => <CompleteAccountPage completeAccount={completeAccount}/> }/>
         <Route path="/login"
                component={ () => <LoginWithCredentials signInWithCredentials={ signInWithCredentials }/> }/>
       </Switch>

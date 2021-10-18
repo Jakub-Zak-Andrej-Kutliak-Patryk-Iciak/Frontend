@@ -1,13 +1,14 @@
 import { Form } from "semantic-ui-react";
 import { FormProvider, useForm } from "react-hook-form";
-import { InputHook } from "./inputs";
-import { required, birthday, password } from "./validations";
+import { InputHook, RadioHook } from "./inputs";
+import { required, birthday } from "./validations";
 import PropTypes from "prop-types";
-import { isNumber } from "lodash";
-import AppButton from "../button/AppButton";
+import { AppButton } from "../";
 
 
 const CompleteAccountForm = ({ onSubmit }) => {
+
+  const genderOptions = ["MALE", "FEMALE", "OTHER"]
 
   const useFormMethods = useForm({ mode: 'onBlur' })
   const {
@@ -29,7 +30,7 @@ const CompleteAccountForm = ({ onSubmit }) => {
   }
 
   return (
-    <div className="py-4 px-8 mx-auto text-left border">
+    <div className="py-4 px-8 mx-auto text-left">
       <FormProvider { ...useFormMethods }>
         <Form form={ 'completeAccountForm' } onSubmit={ handleSubmit(onInnerSubmit) }>
           <div className="grid md:grid-cols-2 md:gap-8">
@@ -45,11 +46,26 @@ const CompleteAccountForm = ({ onSubmit }) => {
                        } }
                        style={ { width: '110px' } }
             />
+            <RadioHook name="gender"
+                       items={ genderOptions.map(item => ({
+                         name: item.toLowerCase(),
+                         label: item.toLowerCase(),
+                         value: item
+                       })) }
+                       label="Gender"
+                       rules={ {
+                         validate: {
+                           isRequired: required,
+                         }
+                       } }
+                       itemStyle={ { color: "white" } }
+                       inline
+            />
             {/* TODO: radio buttons here with options: man, women, other */ }
           </div>
-            <div className="pt-12">
-              <AppButton text="Save"/>
-            </div>
+          <div className="pt-12">
+            <AppButton text="Save"/>
+          </div>
         </Form>
       </FormProvider>
     </div>

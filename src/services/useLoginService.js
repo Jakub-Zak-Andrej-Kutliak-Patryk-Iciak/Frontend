@@ -109,6 +109,23 @@ const useLoginService = ({ addToast, setToken }) => {
     })
   }
 
+  const completeAccount = (payload) => {
+    const { ok, data: { token, error } } = securedAPI.completeRegistration(payload)
+    if (ok) {
+      setToken(token)
+    } else {
+      addToast((
+        <div>
+          <strong>Registration failed</strong>
+          <div>{ error }</div>
+        </div>
+      ), {
+        appearance: 'error',
+        autoDismiss: true,
+      })
+    }
+  }
+
   return {
     isLoading,
     signInWithGoogle: () => signInWithProvider(new GoogleAuthProvider()),
@@ -117,6 +134,7 @@ const useLoginService = ({ addToast, setToken }) => {
     signInWithCredentials,
     registerWithCredentials,
     signInAsGuest,
+    completeAccount,
   }
 }
 

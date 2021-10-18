@@ -6,6 +6,7 @@ import { useToasts } from "react-toast-notifications";
 
 
 const StoreContext = createContext({
+  loading: true,
   store: {},
   user: null,
   getStoreItem: () => {},
@@ -14,6 +15,7 @@ const StoreContext = createContext({
 })
 
 const StoreProvider = ({ children }) => {
+  const [loading, setLoading] = useState(true)
   const [store, setStore] = useState(getStateItem("", initState))
   const [user, setUser] = useState(null)
 
@@ -24,6 +26,8 @@ const StoreProvider = ({ children }) => {
     const token = getStoreItem("auth.token")
     if (token) {
       validateAndSaveToken(token)
+    } else {
+      setLoading(false)
     }
   }, [])
 
@@ -47,6 +51,7 @@ const StoreProvider = ({ children }) => {
 
   const validateAndSaveToken = async (token) => {
     const { error } = await validateToken(token)
+    setLoading(false)
     setStoreItem("auth.token", error ? null : token)
   }
 
@@ -73,6 +78,7 @@ const StoreProvider = ({ children }) => {
 
   return (
     <StoreContext.Provider value={{
+      loading,
       store,
       user,
       saveToken: validateAndSaveToken,

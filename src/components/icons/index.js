@@ -1,1 +1,6 @@
 export { default as LeftBackArrowIcon } from './LeftBackArrowIcon'
+export { default as ListOutlinedIcon } from './ListOutlinedIcon'
+export { default as UserOutlinedIcon } from './UserOutlinedIcon'
+export { default as MapOutlinedIcon } from './MapOutlinedIcon'
+export { default as SettingsOutlinedIcon } from './SettingsOutlinedIcon'
+export { default as SettingsSingleOutlinedIcon } from './SettingsSingleOutlinedIcon'

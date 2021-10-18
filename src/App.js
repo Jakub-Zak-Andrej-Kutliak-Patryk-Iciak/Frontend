@@ -15,7 +15,7 @@ const App = ({ accountRoutes, routes }) => {
   useEffect(() => {
     if (pathname.startsWith("/login") && store?.auth?.token) {
       if (user) {
-        push(user.isProfileComplete ? "/":"/account/complete")
+        push(user.isProfileComplete ? "/":"/login/register/complete")
       }
     }
   }, [user, store, push, pathname])

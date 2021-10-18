@@ -12,6 +12,9 @@ export const initState = {
   auth: {
     token: null,
   },
+  navbar: {
+    activeTab: "map",
+  },
   preferences: {
     darkmode: false,
   },
