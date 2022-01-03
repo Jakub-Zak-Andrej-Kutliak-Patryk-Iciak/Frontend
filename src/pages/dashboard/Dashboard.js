@@ -33,7 +33,7 @@ const Dashboard = () => {
   }, [])
 
   return (
-    <div className="uppercase text-black">
+    <div className="uppercase text-black w-full">
       <div className="fixed left-0 right-0 top-0 px-3 justify-between text-black flex h-14 bg-white">
         <div className="flex my-auto">
           { user && user.photoUrl ? (
@@ -47,7 +47,7 @@ const Dashboard = () => {
           <strong>The parking app</strong>
         </div>
       </div>
-      <div className="mt-20">
+      <div className="w-full">
         <Switch>
           <Route path={ "/map" } component={ () => <MapPage/> }/>
           <Route path={ "/list" } component={ () => <ListPage/> }/>
