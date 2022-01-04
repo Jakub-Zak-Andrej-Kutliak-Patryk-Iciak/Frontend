@@ -17,6 +17,7 @@ const Dashboard = () => {
   const { push } = useHistory()
   const { user, setStoreItem, getStoreItem } = useStore()
   const [activeTab, setActiveTab] = useState(getStoreItem("navbar.activeTab"))
+  const [mapApiKey, setMapApiKey] = useState(process.env.REACT_APP_GOOGLE_MAPS_API_KEY)
 
   const changeTab = async (tab) => {
     if (tabs.indexOf(tab) === -1) return
@@ -49,10 +50,10 @@ const Dashboard = () => {
       </div>
       <div className="w-full">
         <Switch>
-          <Route path={ "/map" } component={ () => <MapPage/> }/>
+          <Route path={ "/map" } component={ () => <MapPage mapApiKey={mapApiKey}/> }/>
           <Route path={ "/list" } component={ () => <ListPage/> }/>
           <Route path={ "/settings" } component={ () => <SettingsPage/> }/>
-          <Route path={ "/account" } component={ () => <AccountPage/> }/>
+          <Route path={ "/account" } component={ () => <AccountPage user={user} /> }/>
         </Switch>
       </div>
       <div className="fixed bottom-0 right-0 left-0 justify-around center text-black flex h-14 bg-white rounded-t-4xl">

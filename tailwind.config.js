@@ -23,9 +23,14 @@ module.exports = {
       spacing: {
         '128': '32rem',
         '144': '36rem',
+        '1/5': '13vh',
+        '1/10': '2vh'
       },
       borderRadius: {
         '4xl': '2rem',
+      },
+      animation: {
+        'spin-slow': 'spin 3s linear infinite',
       }
     },
   },

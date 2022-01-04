@@ -1,17 +1,20 @@
+import { Grid, Image } from "semantic-ui-react";
 
 
-const AccountPage = () => {
+const AccountPage = ({ user }) => {
+
+  console.log('user', user)
 
   return (
     <div>
-      <strong>Account page here</strong>
+      <Grid.Column align={'center'}>
+        <Image src={user.photoUrl} size='small' circular />
+      </Grid.Column>
+      <div className="my-6">
+        <strong>{ `${user.firstName} ${user.lastName}` }</strong>
+      </div>
       <div>
-        Lorem ipsumLorem ipsumLorem ipsumLorem ipsum
-        Lorem ipsumLorem ipsumLorem ipsum
-        Lorem ipsumLorem ipsumLorem ipsum
-        Lorem ipsum
-        Lorem ipsum
-        Lorem ipsumLorem ipsum
+        other stuff
       </div>
     </div>
   )
