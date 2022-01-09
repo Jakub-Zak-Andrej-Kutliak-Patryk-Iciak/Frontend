@@ -3,6 +3,7 @@ import { getStateItem, initState, setStateItem } from "./persistentStore";
 import { isString } from "lodash/lang";
 import useTokenAuth from "../services/useTokenAuth";
 import { useToasts } from "react-toast-notifications";
+import { useHistory } from "react-router-dom";
 
 
 const StoreContext = createContext({
@@ -21,6 +22,7 @@ const StoreProvider = ({ children }) => {
 
   const { addToast } = useToasts()
   const { validateAndDecodeToken } = useTokenAuth()
+  const { push } = useHistory()
 
   useEffect(() => {
     const token = getStoreItem("auth.token")
@@ -43,16 +45,18 @@ const StoreProvider = ({ children }) => {
       ), {
         appearance: 'error',
         autoDismiss: true,
+        onDismiss: () => push('/')
       });
     }
     setUser(user)
-    return { error }
+    return { error, user }
   }
 
   const validateAndSaveToken = async (token) => {
-    const { error } = await validateToken(token)
+    const { error, user } = await validateToken(token)
     setLoading(false)
     setStoreItem("auth.token", error ? null : token)
+    return user
   }
 
   const getStoreItem = (path = "", instead) => {
@@ -69,6 +73,8 @@ const StoreProvider = ({ children }) => {
           setStore(setStateItem("auth.token", value))
         }
       })
+    } else if (path === 'auth.token') {
+      setUser(null)
     }
 
     const state = setStateItem(path, value);

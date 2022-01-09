@@ -3,6 +3,7 @@ import { Controller, useFormContext } from 'react-hook-form'
 import PropTypes from 'prop-types'
 import { ErrorMessage } from '@hookform/error-message'
 import { get } from "lodash";
+import { useEffect } from "react";
 
 const labelColors = ["white", "black"]
 
@@ -21,7 +22,6 @@ export const InputHook = ({
                           }) => {
   const { control, clearErrors, formState: { errors } } = useFormContext()
   const getError = () => errors[name]
-
 
   const defVal = defaultValue === null || defaultValue === undefined ? '' : defaultValue
 
@@ -88,9 +88,8 @@ export const RadioHook = ({
                             defaultValue,
                             itemStyle = { color: "white" },
                           }) => {
-  const { control, errors } = useFormContext()
-
-  const getError = () => get(errors, name)
+  const { control, clearErrors, formState: { errors } } = useFormContext()
+  const getError = () => errors[name]
 
   const defVal = defaultValue === null || defaultValue === undefined ? '' : defaultValue
 
@@ -103,13 +102,14 @@ export const RadioHook = ({
                     <FormGroup style={ { margin: '.5em', color: "white" } }>
                       { items.map((item, index) => {
                         return <Radio value={ item.value }
-                                      className="mx-5 text-white"
+                                      className="mr-1 mb-1 text-white bg-white p-2 px-4 rounded-3xl"
                                       key={ index }
                                       name={ item.name }
                                       label={ item.label }
                                       checked={ field.value === item.value }
                                       onChange={ (event, { value }) => {
                                         field.onChange(value)
+                                        clearErrors()
                                         onChange(event, value)
                                       } }
                                       style={ itemStyle }

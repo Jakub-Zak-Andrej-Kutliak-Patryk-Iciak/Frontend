@@ -13,13 +13,14 @@ const ParkingLotCard = ({ item, onCancelClick }) => {
       <div className="mt-2">
         <a href={`https://www.google.com/maps/search/?api=1&query=${item.location.lat},${item.location.lng}`}
            target={'_blank'}
+           rel="noreferrer"
         >
           {/*{ item.location.address }*/}
           Show on map
         </a>
       </div>
       {onCancelClick &&
-      <Icon name={'cancel'} className="absolute top-3 right-3" size="small" onClick={onCancelClick}/>
+      <Icon name={'cancel'} className="absolute top-3 right-3 cursor-pointer" size="small" onClick={onCancelClick}/>
       }
     </Card>
   )
