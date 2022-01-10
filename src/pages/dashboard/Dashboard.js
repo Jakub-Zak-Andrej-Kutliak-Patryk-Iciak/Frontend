@@ -10,8 +10,9 @@ import { useStore } from "../../store/StoreProvider";
 import { useEffect, useState } from "react";
 import { MapPage, ListPage, SettingsPage, AccountPage } from "../account";
 import CompleteAccountPage from "../login/CompleteAccountPage";
+import PaymentPage from "../account/PaymentPage";
 
-export const NAVBAR_TABS = ["map", "list", "settings", "account"]
+export const NAVBAR_TABS = ["map", "list", "settings", "account", "payment"]
 
 const Dashboard = () => {
   const { pathname } = useLocation()
@@ -56,6 +57,7 @@ const Dashboard = () => {
           <Route path={ "/settings" } component={ () => <SettingsPage/> }/>
           <Route path={ "/list" } component={ () => <ListPage/> }/>
           <Route path={ "/map" } component={ () => <MapPage mapApiKey={mapApiKey}/> }/>
+          <Route path={ "/payment" } component={ () => <PaymentPage/> }/>
         </Switch>
       </div>
       <div className="fixed bottom-0 right-0 left-0 justify-around center text-black flex h-14 bg-white rounded-t-4xl">
@@ -80,6 +82,14 @@ const Dashboard = () => {
             <div className={ `border ${ activeTab === "settings" ? 'border-amber-500' : 'border-white' }` }/>
             <div className="my-auto p-3 cursor-pointer" onClick={ () => changeTab("settings") }>
               <SettingsSingleOutlinedIcon color={ activeTab === "settings" ? "blue" : "black" } size={ "25px" }/>
+            </div>
+          </div>
+        </div>
+        <div className="">
+          <div className="flex-col my-auto">
+            <div className={ `border ${ activeTab === "payment" ? 'border-amber-500' : 'border-white' }` }/>
+            <div className="my-auto p-3 cursor-pointer" onClick={ () => changeTab("payment") }>
+              <SettingsSingleOutlinedIcon color={ activeTab === "payment" ? "blue" : "black" } size={ "25px" }/>
             </div>
           </div>
         </div>
