@@ -4,11 +4,16 @@ import { InputHook, RadioHook } from "./inputs";
 import { required, birthday } from "./validations";
 import PropTypes from "prop-types";
 import { AppButton } from "../";
+import AppLink from "../link/AppLink";
+import { useStore } from "../../store/StoreProvider";
+import { useHistory } from "react-router-dom";
 
 
 const CompleteAccountForm = ({ onSubmit }) => {
 
   const genderOptions = ["MALE", "FEMALE", "OTHER"]
+  const { setStoreItem } = useStore()
+  const { push } = useHistory()
 
   const useFormMethods = useForm({ mode: 'onBlur' })
   const {
@@ -65,6 +70,9 @@ const CompleteAccountForm = ({ onSubmit }) => {
           </div>
           <div className="pt-12">
             <AppButton text="Save"/>
+          </div>
+          <div className={"m-auto max-w-sm text-xs flex justify-center mt-5"}>
+            <AppLink text={"Finish later"} path={'/map'}/>
           </div>
         </Form>
       </FormProvider>

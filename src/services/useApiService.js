@@ -49,8 +49,8 @@ const create = (baseURL) => {
 
   const signIn = (payload) => api.post(`auth/login`, payload, getUnsecuredHeaders())
   const register = (payload) => api.post(`auth/register`, payload, getUnsecuredHeaders())
-  const signOut = () => api.post(`auth/signOut`, null, getSecuredHeaders())
-  const completeRegistration = (payload) => api.post(`user/complete`, payload, getSecuredHeaders())
+  const signOut = () => api.get(`auth/signOut`, null, getUnsecuredHeaders())
+  const completeRegistration = (payload) => api.post(`user/account/complete`, payload, getSecuredHeaders())
 
   return {
     signIn,

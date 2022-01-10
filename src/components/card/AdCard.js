@@ -9,7 +9,12 @@ const AdCard = ({ item }) => {
       <div>{ item.description }</div>
       <div>{ item.price }</div>
       <div className="mt-2">
-        <a href={item.link} target={'_blank'}>Visit</a>
+        <a href={item.link}
+           target={'_blank'}
+           rel="noreferrer"
+        >
+          Visit
+        </a>
       </div>
     </Card>
   )

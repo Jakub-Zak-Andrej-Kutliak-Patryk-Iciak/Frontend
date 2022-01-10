@@ -27,9 +27,9 @@ const ChooseLoginMethod = ({ signInWithGoogle, signInWithFacebook, signInWithCre
                       action={signInWithCredentials}
                       color={"#fff"}
       />
-      {/*<ProviderButton action={signInAsGuest}*/}
-      {/*                disabled*/}
-      {/*/>*/}
+      <ProviderButton action={signInAsGuest}
+                      disabled
+      />
     </div>
   )
 }
