@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Marker from "../../components/map/Marker";
+import PropTypes from 'prop-types'
 import SearchBox from "../../components/map/SearchBox";
 import GoogleMap from "google-map-react";
 import { ParkingLotCard } from "../../components/card";
@@ -7,7 +8,7 @@ import { getStateItem } from "../../store/persistentStore";
 import { Icon } from "semantic-ui-react";
 
 
-const MapPage = ({ mapApiKey }) => {
+const MapPage = ({ mapApiKey, setItemToBook }) => {
 
   const [coordinates, setCoordinates] = useState({ lat: 57.051580, lng: 9.918679 })
   const [activeItem, setActiveItem] = useState(null)
@@ -75,12 +76,17 @@ const MapPage = ({ mapApiKey }) => {
       { activeItem &&
       <div className="absolute bottom-1/5 flex justify-center w-full">
         <div className="w-full max-w-xs">
-          <ParkingLotCard item={ activeItem } onCancelClick={() => setActiveItem(null)}/>
+          <ParkingLotCard item={ activeItem } onCancelClick={() => setActiveItem(null)} setItemToBook={setItemToBook}/>
         </div>
       </div>
       }
     </div>
   )
+}
+
+MapPage.propTypes = {
+  mapApiKey: PropTypes.string.isRequired,
+  setItemToBook: PropTypes.func.isRequired,
 }
 
 export default MapPage

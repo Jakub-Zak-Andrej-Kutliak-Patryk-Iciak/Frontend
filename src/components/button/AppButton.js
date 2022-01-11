@@ -1,4 +1,4 @@
-import { Button } from "semantic-ui-react";
+import { Button, Loader } from "semantic-ui-react";
 import s from './Button.module.css'
 
 
@@ -7,11 +7,12 @@ const AppButton = ({ action,
                      color = 'linear-gradient(0.25turn, #3f87a6, #ebf8e1, #f69d3c)',
                      textColor = "#000",
                      disabled = false,
-                     className = ""
+                     className = "",
+                     loading = false,
 }) => {
 
   const innerAction = () => {
-    if (!disabled && action) {
+    if (!disabled && !loading && action) {
       action()
     }
   }
@@ -24,6 +25,7 @@ const AppButton = ({ action,
               cursor: disabled ? 'not-allowed':'pointer',
               width: '100%',
             }}
+            loading={loading}
     >
       <div style={{ width: '100%', color: textColor }}>{ text }</div>
     </Button>

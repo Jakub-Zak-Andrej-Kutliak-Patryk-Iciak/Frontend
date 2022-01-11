@@ -11,13 +11,17 @@ const AppLink = ({ path, text, prependIcon, appendIcon, onClick }) => {
   const onInnerClick = () => {
     if (onClick) {
       onClick()
-    } else if (path) {
+    }
+
+    if (path) {
       const tab = path.replaceAll('/', '')
       if (NAVBAR_TABS.includes(tab)) {
         setStoreItem('navbar.activeTab', tab)
       }
       push(path);
-    } else {
+    }
+
+    if (!onClick && !path) {
       goBack();
     }
   }

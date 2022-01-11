@@ -2,7 +2,7 @@ import ParkingLotCard from "../../components/card/ParkingLotCard";
 import { AdCard } from "../../components/card";
 import { getStateItem } from "../../store/persistentStore";
 
-const ListPage = () => {
+const ListPage = ({ setItemToBook }) => {
 
 
   return (
@@ -11,7 +11,7 @@ const ListPage = () => {
         item.tag && item.tag === 'ad' ? (
           <AdCard item={ item } key={item.title}/>
         ) : (
-          <ParkingLotCard item={ item } key={item.title}/>
+          <ParkingLotCard item={ item } key={item.title} setItemToBook={setItemToBook}/>
         )
       ))
       }

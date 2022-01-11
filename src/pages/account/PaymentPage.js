@@ -1,43 +1,51 @@
 import React, { useState, useEffect } from "react";
-import { loadStripe } from "@stripe/stripe-js";
+import PropTypes from 'prop-types'
 import { Elements } from "@stripe/react-stripe-js";
+import CheckoutForm from "../../components/form/CheckoutForm";
+import usePaymentService from "../../services/usePaymentService";
 
-import CheckoutForm from "../../components/payment/CheckoutForm";
 
-// Make sure to call loadStripe outside of a component’s render to avoid
-// recreating the Stripe object on every render.
-// This is your test publishable API key.
-const stripePromise = loadStripe("pk_test_51KFdyXAK1aFR8SyYHG9m4AZnnpIjrYtqW8hrnBerpqc0T8hGuMBYnMgFilE5X8VUKMBbwqlSMSyip8tc9Hd6SniY00AAMiWBpK");
+const PaymentPage = ({ item }) => {
+  const [clientSecret, setClientSecret] = useState(null)
+  const { stripePromise, createPaymentIntent } = usePaymentService()
 
-export default function PaymentPage() {
-    const [clientSecret, setClientSecret] = useState("");
+  useEffect(() => {
+    createPaymentIntent(item, setClientSecret)
+  }, [])
 
-    useEffect(() => {
-        // Create PaymentIntent as soon as the page loads
-        fetch("http://localhost:8089/api/payment/create-payment-intent", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ currency: 'dkk', amount: 15000, description: 'API test' } ),
-        })
-            .then((res) => res.json())
-            .then((data) => setClientSecret(data.clientSecret));
-    }, []);
+  const appearance = {
+    theme: 'stripe',
+  }
+  const options = {
+    clientSecret,
+    appearance,
+  }
 
-    const appearance = {
-        theme: 'stripe',
-    };
-    const options = {
-        clientSecret,
-        appearance,
-    };
-
-    return (
-        <div className="App" style={{display: "flex", "align-items": "center", "justify-content": "center"}}>
-            {clientSecret && (
-                <Elements options={options} stripe={stripePromise}>
-                    <CheckoutForm />
-                </Elements>
-            )}
+  return (
+    <div className="flex flex-col align-middle justify-center">
+      { item &&
+      <div>
+        <h3 className="mb-2 font-extrabold">
+          { item.title }
+        </h3>
+        <div>
+          { item.location.address }
         </div>
-    );
+      </div>
+      }
+      <div className="m-2">
+        { clientSecret && stripePromise && (
+          <Elements options={ options } stripe={ stripePromise }>
+            <CheckoutForm clientSecret={ clientSecret } item={item}/>
+          </Elements>
+        ) }
+      </div>
+    </div>
+  );
 }
+
+PaymentPage.propTypes = {
+  item: PropTypes.object.isRequired,
+}
+
+export default PaymentPage

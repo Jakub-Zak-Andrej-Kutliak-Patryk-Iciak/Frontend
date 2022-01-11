@@ -11,8 +11,9 @@ import { useEffect, useState } from "react";
 import { MapPage, ListPage, SettingsPage, AccountPage } from "../account";
 import CompleteAccountPage from "../login/CompleteAccountPage";
 import PaymentPage from "../account/PaymentPage";
+import PaymentSuccessPage from "../account/PaymentSuccessPage";
 
-export const NAVBAR_TABS = ["map", "list", "settings", "account", "payment"]
+export const NAVBAR_TABS = ["map", "list", "settings", "account", "payment/success"]
 
 const Dashboard = () => {
   const { pathname } = useLocation()
@@ -20,6 +21,7 @@ const Dashboard = () => {
   const { user, setStoreItem, getStoreItem } = useStore()
   const [activeTab, setActiveTab] = useState(getStoreItem("navbar.activeTab"))
   const [mapApiKey, setMapApiKey] = useState(process.env.REACT_APP_GOOGLE_MAPS_API_KEY)
+  const [itemToBook, setItemToBook] = useState(null)
 
   const changeTab = async (tab) => {
     if (NAVBAR_TABS.indexOf(tab) === -1) return
@@ -29,11 +31,18 @@ const Dashboard = () => {
   }
 
   useEffect(() => {
-    setActiveTab(getStoreItem("navbar.activeTab"), NAVBAR_TABS[0]);
-    if (NAVBAR_TABS.join("|").indexOf(pathname.substr(1)) === -1) {
-      push(`/${ activeTab }`)
+    if (itemToBook) {
+      if (!pathname.includes('/payment/')) {
+        changeTab('payment').then(() => push(`/payment/checkout`));
+      }
+      return
     }
-  }, [])
+
+    for (let tab of NAVBAR_TABS) {
+      if (pathname.includes(tab)) return
+    }
+    changeTab(NAVBAR_TABS[0])
+  }, [pathname, itemToBook])
 
   return (
     <div className="uppercase text-black w-full">
@@ -52,44 +61,37 @@ const Dashboard = () => {
       </div>
       <div className="w-full">
         <Switch>
+          <Route path={ "/payment/checkout" } exact component={ () => itemToBook && <PaymentPage item={itemToBook}/> }/>
+          <Route path={ "/payment/success" } component={ () => <PaymentSuccessPage/> }/>
           <Route path={ "/account/complete" } exact component={ () => <CompleteAccountPage/> }/>
           <Route path={ "/account" } component={ () => <AccountPage user={user} /> }/>
-          <Route path={ "/settings" } component={ () => <SettingsPage/> }/>
-          <Route path={ "/list" } component={ () => <ListPage/> }/>
-          <Route path={ "/map" } component={ () => <MapPage mapApiKey={mapApiKey}/> }/>
-          <Route path={ "/payment" } component={ () => <PaymentPage/> }/>
+          <Route path={ "/settings" } component={ () => <SettingsPage /> }/>
+          <Route path={ "/list" } component={ () => <ListPage setItemToBook={setItemToBook} /> }/>
+          <Route path={ "/map" } component={ () => <MapPage mapApiKey={mapApiKey} setItemToBook={setItemToBook}/> }/>
         </Switch>
       </div>
       <div className="fixed bottom-0 right-0 left-0 justify-around center text-black flex h-14 bg-white rounded-t-4xl">
         <div className="">
           <div className="flex-col my-auto">
-            <div className={ `border ${ activeTab === "map" ? 'border-amber-500' : 'border-white' }` }/>
+            <div className={ `border ${ pathname.includes('/map') ? 'border-amber-500' : 'border-white' }` }/>
             <div className="flex my-auto p-3 cursor-pointer" onClick={ () => changeTab("map") }>
-              <MapOutlinedIcon color={ activeTab === "map" ? "blue" : "black" } size={ "25px" }/>
+              <MapOutlinedIcon color={ pathname.includes('/map') ? "blue" : "black" } size={ "25px" }/>
             </div>
           </div>
         </div>
         <div className="">
           <div className="flex-col my-auto">
-            <div className={ `border ${ activeTab === "list" ? 'border-amber-500' : 'border-white' }` }/>
+            <div className={ `border ${ pathname.includes('/list') ? 'border-amber-500' : 'border-white' }` }/>
             <div className="my-auto p-3 cursor-pointer" onClick={ () => changeTab("list") }>
-              <ListOutlinedIcon color={ activeTab === "list" ? "blue" : "black" } size={ "25px" }/>
+              <ListOutlinedIcon color={ pathname.includes('/list') ? "blue" : "black" } size={ "25px" }/>
             </div>
           </div>
         </div>
         <div className="">
           <div className="flex-col my-auto">
-            <div className={ `border ${ activeTab === "settings" ? 'border-amber-500' : 'border-white' }` }/>
+            <div className={ `border ${ pathname.includes('/settings') ? 'border-amber-500' : 'border-white' }` }/>
             <div className="my-auto p-3 cursor-pointer" onClick={ () => changeTab("settings") }>
-              <SettingsSingleOutlinedIcon color={ activeTab === "settings" ? "blue" : "black" } size={ "25px" }/>
-            </div>
-          </div>
-        </div>
-        <div className="">
-          <div className="flex-col my-auto">
-            <div className={ `border ${ activeTab === "payment" ? 'border-amber-500' : 'border-white' }` }/>
-            <div className="my-auto p-3 cursor-pointer" onClick={ () => changeTab("payment") }>
-              <SettingsSingleOutlinedIcon color={ activeTab === "payment" ? "blue" : "black" } size={ "25px" }/>
+              <SettingsSingleOutlinedIcon color={ pathname.includes('/settings') ? "blue" : "black" } size={ "25px" }/>
             </div>
           </div>
         </div>
