@@ -83,9 +83,6 @@ export const initState = {
       id: 5,
       tag: 'ad',
       title: 'Netflix',
-      description: 'Watch the newest movies',
-      price: '9.99dkk/month',
-      link: 'https://www.netflix.com/',
     },
     {
       id: 6,

@@ -1,22 +1,26 @@
+import PropTypes from 'prop-types'
 import ParkingLotCard from "../../components/card/ParkingLotCard";
 import { AdCard } from "../../components/card";
-import { getStateItem } from "../../store/persistentStore";
 
-const ListPage = () => {
-
+const ListPage = ({ setItemToBook, items }) => {
 
   return (
     <div className="my-20 w-full">
-      { getStateItem('testItems').map((item) => (
+      { items.map((item) => (
         item.tag && item.tag === 'ad' ? (
           <AdCard item={ item } key={item.title}/>
         ) : (
-          <ParkingLotCard item={ item } key={item.title}/>
+          <ParkingLotCard item={ item } key={item.title} setItemToBook={setItemToBook}/>
         )
       ))
       }
     </div>
   )
+}
+
+ListPage.propTypes = {
+  items: PropTypes.array.isRequired,
+  setItemToBook: PropTypes.func.isRequired,
 }
 
 export default ListPage
