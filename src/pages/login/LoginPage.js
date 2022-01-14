@@ -9,11 +9,12 @@ import { LeftBackArrowIcon } from "../../components/icons";
 import { useToasts } from "react-toast-notifications";
 import { useStore } from "../../store/StoreProvider";
 import CompleteAccountPage from "./CompleteAccountPage";
+import { useEffect } from "react";
 
 
 const LoginPage = () => {
   const { addToast } = useToasts()
-  const { setStoreItem } = useStore()
+  const { user, saveToken, setStoreItem } = useStore()
   const {
     isLoading,
     signInWithGoogle,
@@ -21,9 +22,14 @@ const LoginPage = () => {
     signInWithCredentials,
     signInAsGuest,
     registerWithCredentials,
-    completeAccount
-  } = useLoginService({ addToast, setToken: (token) => setStoreItem("auth.token", token) })
+  } = useLoginService({ addToast, saveToken, setStoreItem })
   const { push } = useHistory()
+
+  useEffect(() => {
+    if (user) {
+      push('/account/complete')
+    }
+  }, [user])
 
   return (
     <div className="w-11/12 rounded-md pb-8 max-w-5xl my-5"
@@ -40,14 +46,13 @@ const LoginPage = () => {
                                                                                signInWithCredentials={ () => push('/login') }
                                                                                signInAsGuest={ signInAsGuest }/> }
         />
-        <Route path="/login/register"
+        <Route path="/login/register" exact
                component={ () => <RegisterPage registerWithCredentials={ registerWithCredentials }/> }/>
-        <Route path="/login/register/complete" component={ () => <CompleteAccountPage completeAccount={completeAccount}/> }/>
         <Route path="/login"
                component={ () => <LoginWithCredentials signInWithCredentials={ signInWithCredentials }/> }/>
       </Switch>
     </div>
-  )
+  );
 }
 
 export default LoginPage

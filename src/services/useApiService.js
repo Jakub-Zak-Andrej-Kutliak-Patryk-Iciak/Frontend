@@ -49,14 +49,24 @@ const create = (baseURL) => {
 
   const signIn = (payload) => api.post(`auth/login`, payload, getUnsecuredHeaders())
   const register = (payload) => api.post(`auth/register`, payload, getUnsecuredHeaders())
-  const signOut = () => api.post(`auth/signOut`, null, getSecuredHeaders())
-  const completeRegistration = (payload) => api.post(`user/complete`, payload, getSecuredHeaders())
+  const signOut = () => api.get(`auth/signOut`, null, getUnsecuredHeaders())
+  const completeRegistration = (payload) => api.post(`user/account/complete`, payload, getSecuredHeaders())
+
+  const createPaymentIntent = (payload) => api.post('api/payment/create-payment-intent', payload, getSecuredHeaders())
+  const confirmBooking = ({ paymentIntentId }) => api.post(`api/payment/confirm-booking/${paymentIntentId}`, {}, getSecuredHeaders())
+
+  const fetchAds = () => api.get(`ads/fetch`, null, getUnsecuredHeaders())
 
   return {
     signIn,
     register,
     signOut,
     completeRegistration,
+
+    createPaymentIntent,
+    confirmBooking,
+
+    fetchAds,
   }
 }
 

@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
+import PropTypes from 'prop-types'
 import { getAuth, getRedirectResult, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, signInWithRedirect } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import useScreenSizeService from "./useScreenSizeService";
 import useEnvService from "./useEnvService";
 import { securedAPI } from "./useApiService";
+import { useHistory } from "react-router-dom";
 
 
-const useLoginService = ({ addToast, setToken }) => {
+const useLoginService = ({ addToast, saveToken, setStoreItem }) => {
   const [isLoading, setLoading] = useState(false)
   const { isMobile } = useScreenSizeService()
   const { firebaseConfig } = useEnvService()
+  const { push } = useHistory()
 
   useEffect(() => {
     if (firebaseConfig) {
@@ -40,7 +43,15 @@ const useLoginService = ({ addToast, setToken }) => {
       accessToken: credential.accessToken,
     }).then(({ ok, data: { token } }) => {
       if (ok && token) {
-        setToken(token)
+        saveToken(token)
+          .then((decoded) => {
+            if (decoded && decoded.isProfileComplete) {
+              setStoreItem('navbar.activeTab', 'map')
+              push('/map');
+            } else {
+              push('/account/complete')
+            }
+          })
       } else {
         onErrorCallback({ message: "Sign in failed" })
       }
@@ -87,7 +98,7 @@ const useLoginService = ({ addToast, setToken }) => {
     securedAPI.signIn(data)
       .then(({ token }) => {
         if (token) {
-          setToken(token)
+          saveToken(token)
             .then(decoded => {
               console.log('credential login got decoded', decoded)
             })
@@ -102,7 +113,7 @@ const useLoginService = ({ addToast, setToken }) => {
     securedAPI.register(data)
       .then(({ token }) => {
         if (token) {
-          setToken(token)
+          saveToken(token)
         }
       }).finally(() => {
       setLoading(false)
@@ -110,20 +121,31 @@ const useLoginService = ({ addToast, setToken }) => {
   }
 
   const completeAccount = (payload) => {
-    const { ok, data: { token, error } } = securedAPI.completeRegistration(payload)
+    const { ok, data } = securedAPI.completeRegistration(payload)
     if (ok) {
-      setToken(token)
+      saveToken(data.token)
     } else {
       addToast((
         <div>
           <strong>Registration failed</strong>
-          <div>{ error }</div>
+          <div>{ (data && data.error) || 'Something went wrong. Please, refresh the page.' }</div>
         </div>
       ), {
         appearance: 'error',
         autoDismiss: true,
       })
     }
+  }
+
+  const logOut = () => {
+    securedAPI.signOut()
+      .then(({ ok, data }) => {
+        if (ok) {
+          setStoreItem('auth.token', null)
+          setStoreItem('navbar.activeTab', 'map')
+          push('/')
+        }
+      })
   }
 
   return {
@@ -135,7 +157,14 @@ const useLoginService = ({ addToast, setToken }) => {
     registerWithCredentials,
     signInAsGuest,
     completeAccount,
+    logOut,
   }
+}
+
+useLoginService.propTypes = {
+  addToast: PropTypes.func.isRequired,
+  saveToken: PropTypes.func.isRequired,
+  setStoreItem: PropTypes.func.isRequired,
 }
 
 export default useLoginService
