@@ -4,11 +4,10 @@ import PropTypes from 'prop-types'
 import SearchBox from "../../components/map/SearchBox";
 import GoogleMap from "google-map-react";
 import { ParkingLotCard } from "../../components/card";
-import { getStateItem } from "../../store/persistentStore";
 import { Icon } from "semantic-ui-react";
 
 
-const MapPage = ({ mapApiKey, setItemToBook }) => {
+const MapPage = ({ mapApiKey, items, setItemToBook }) => {
 
   const [coordinates, setCoordinates] = useState({ lat: 57.051580, lng: 9.918679 })
   const [activeItem, setActiveItem] = useState(null)
@@ -53,7 +52,7 @@ const MapPage = ({ mapApiKey, setItemToBook }) => {
                  onGoogleApiLoaded={ ({ map, maps }) => apiHasLoaded(map, maps) }
                  center={ coordinates }
       >
-        { getStateItem('testItems') && getStateItem('testItems').filter(item => item.location).map(item => (
+        { items && items.filter(item => item.location).map(item => (
           <Marker key={ item.id }
                   text={ item.busy }
                   onClick={ (event) => setActiveItem(item) }
@@ -86,6 +85,7 @@ const MapPage = ({ mapApiKey, setItemToBook }) => {
 
 MapPage.propTypes = {
   mapApiKey: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
   setItemToBook: PropTypes.func.isRequired,
 }
 

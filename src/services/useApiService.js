@@ -55,6 +55,8 @@ const create = (baseURL) => {
   const createPaymentIntent = (payload) => api.post('api/payment/create-payment-intent', payload, getSecuredHeaders())
   const confirmBooking = ({ paymentIntentId }) => api.post(`api/payment/confirm-booking/${paymentIntentId}`, {}, getSecuredHeaders())
 
+  const fetchAds = () => api.get(`ads/fetch`, null, getUnsecuredHeaders())
+
   return {
     signIn,
     register,
@@ -63,6 +65,8 @@ const create = (baseURL) => {
 
     createPaymentIntent,
     confirmBooking,
+
+    fetchAds,
   }
 }
 

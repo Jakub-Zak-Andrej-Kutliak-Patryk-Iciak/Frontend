@@ -12,6 +12,7 @@ import { MapPage, ListPage, SettingsPage, AccountPage } from "../account";
 import CompleteAccountPage from "../login/CompleteAccountPage";
 import PaymentPage from "../account/PaymentPage";
 import PaymentSuccessPage from "../account/PaymentSuccessPage";
+import useParkingService from "../../services/useParkingService";
 
 export const NAVBAR_TABS = ["map", "list", "settings", "account", "payment/success"]
 
@@ -19,6 +20,7 @@ const Dashboard = () => {
   const { pathname } = useLocation()
   const { push } = useHistory()
   const { user, setStoreItem, getStoreItem } = useStore()
+  const { fetchParkingLots, parkingLots } = useParkingService()
   const [activeTab, setActiveTab] = useState(getStoreItem("navbar.activeTab"))
   const [mapApiKey, setMapApiKey] = useState(process.env.REACT_APP_GOOGLE_MAPS_API_KEY)
   const [itemToBook, setItemToBook] = useState(null)
@@ -44,6 +46,13 @@ const Dashboard = () => {
     changeTab(NAVBAR_TABS[0])
   }, [pathname, itemToBook])
 
+  useEffect(() => {
+    console.log('fetching parking lots', parkingLots)
+    if (!Array.isArray(parkingLots) || parkingLots.length === 0) {
+      fetchParkingLots()
+    }
+  }, [parkingLots])
+
   return (
     <div className="uppercase text-black w-full">
       <div className="fixed left-0 right-0 top-0 px-3 justify-between text-black flex h-14 bg-white z-50">
@@ -66,8 +75,8 @@ const Dashboard = () => {
           <Route path={ "/account/complete" } exact component={ () => <CompleteAccountPage/> }/>
           <Route path={ "/account" } component={ () => <AccountPage user={user} /> }/>
           <Route path={ "/settings" } component={ () => <SettingsPage /> }/>
-          <Route path={ "/list" } component={ () => <ListPage setItemToBook={setItemToBook} /> }/>
-          <Route path={ "/map" } component={ () => <MapPage mapApiKey={mapApiKey} setItemToBook={setItemToBook}/> }/>
+          <Route path={ "/list" } component={ () => <ListPage items={parkingLots} setItemToBook={setItemToBook} /> }/>
+          <Route path={ "/map" } component={ () => <MapPage items={parkingLots} mapApiKey={mapApiKey} setItemToBook={setItemToBook}/> }/>
         </Switch>
       </div>
       <div className="fixed bottom-0 right-0 left-0 justify-around center text-black flex h-14 bg-white rounded-t-4xl">
