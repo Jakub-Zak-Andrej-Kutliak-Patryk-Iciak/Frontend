@@ -17,10 +17,14 @@ import useParkingService from "../../services/useParkingService";
 export const NAVBAR_TABS = ["map", "list", "settings", "account", "payment/success"]
 
 const Dashboard = () => {
+
   const { pathname } = useLocation()
   const { push } = useHistory()
   const { user, setStoreItem, getStoreItem } = useStore()
+  const [defaultMapCenter, setDefaultCenter] = useState(getStoreItem("preferences.lastCoords", { lat: 57.051580, lng: 9.918679 }))
+
   const { fetchParkingLots, parkingLots } = useParkingService()
+
   const [activeTab, setActiveTab] = useState(getStoreItem("navbar.activeTab"))
   const [mapApiKey, setMapApiKey] = useState(process.env.REACT_APP_GOOGLE_MAPS_API_KEY)
   const [itemToBook, setItemToBook] = useState(null)
@@ -29,7 +33,13 @@ const Dashboard = () => {
     if (NAVBAR_TABS.indexOf(tab) === -1) return
     await setStoreItem("navbar.activeTab", tab);
     setActiveTab(tab)
-    push(`/${tab}`)
+    push(`/${ tab }`)
+  }
+
+  const onRefreshRequested = (newCoords) => {
+    setStoreItem("preferences.lastCoords", newCoords)
+    fetchParkingLots(newCoords)
+    setDefaultCenter(newCoords)
   }
 
   useEffect(() => {
@@ -47,9 +57,8 @@ const Dashboard = () => {
   }, [pathname, itemToBook])
 
   useEffect(() => {
-    console.log('fetching parking lots', parkingLots)
-    if (!Array.isArray(parkingLots) || parkingLots.length === 0) {
-      fetchParkingLots()
+    if (parkingLots.length === 0) {
+      onRefreshRequested(defaultMapCenter)
     }
   }, [parkingLots])
 
@@ -70,13 +79,23 @@ const Dashboard = () => {
       </div>
       <div className="w-full">
         <Switch>
-          <Route path={ "/payment/checkout" } exact component={ () => itemToBook && <PaymentPage item={itemToBook}/> }/>
+          <Route path={ "/payment/checkout" } exact
+                 component={ () => itemToBook && <PaymentPage item={ itemToBook }/> }/>
           <Route path={ "/payment/success" } component={ () => <PaymentSuccessPage/> }/>
           <Route path={ "/account/complete" } exact component={ () => <CompleteAccountPage/> }/>
-          <Route path={ "/account" } component={ () => <AccountPage user={user} /> }/>
-          <Route path={ "/settings" } component={ () => <SettingsPage /> }/>
-          <Route path={ "/list" } component={ () => <ListPage items={parkingLots} setItemToBook={setItemToBook} /> }/>
-          <Route path={ "/map" } component={ () => <MapPage items={parkingLots} mapApiKey={mapApiKey} setItemToBook={setItemToBook}/> }/>
+          <Route path={ "/account" } component={ () => <AccountPage user={ user }/> }/>
+          <Route path={ "/settings" } component={ () => <SettingsPage/> }/>
+          <Route path={ "/list" }
+                 component={ () => <ListPage items={ parkingLots } setItemToBook={ setItemToBook }/> }/>
+          <Route path={ "/map" }
+                 component={ () => <MapPage items={ parkingLots }
+                                            mapApiKey={ mapApiKey }
+                                            setItemToBook={ setItemToBook }
+                                            onRefreshRequested={ onRefreshRequested }
+                                            defaultCenter={ defaultMapCenter }
+                 />
+                 }
+          />
         </Switch>
       </div>
       <div className="fixed bottom-0 right-0 left-0 justify-around center text-black flex h-14 bg-white rounded-t-4xl">
