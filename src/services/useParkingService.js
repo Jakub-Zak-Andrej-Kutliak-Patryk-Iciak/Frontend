@@ -10,9 +10,8 @@ const useParkingService = () => {
     securedAPI.fetchAds()
       .then(({ ok, data }) => {
         if (ok) {
-          setResults([...results, ...data.map(ad => ({ id: ad, tag: 'ad', title: ad, }))]);
           if (onResolve) {
-            onResolve()
+            onResolve(data.map(ad => ({ tag: 'ad', title: ad })))
           }
           return
         }
@@ -29,11 +28,26 @@ const useParkingService = () => {
     securedAPI.fetchParkingLots(coords)
       .then(({ ok, data }) => {
         if (ok) {
-          results.concat(data)
+          const parkingData = data.parkingData
+          if (!Array.isArray(parkingData) || parkingData.length === 0) return
+
           if (onResolve) {
-            onResolve()
+            onResolve(data)
           }
-          fetchAds();
+          fetchAds((innerData) => {
+            setResults(parkingData.map(spot => ({
+              id: spot.name,
+              name: spot.name,
+              parkingProvider: spot.parkingProvider,
+              capacity: spot.capacity,
+              available: spot.busy,
+              busy: `${((spot.busy / spot.capacity) * 100.).toFixed(2)}%`,
+              location: {
+                lat: spot.latitude,
+                lng: spot.longitude,
+              },
+            })).concat(innerData))
+          });
           return
         }
         console.log("failed to load parking lots")

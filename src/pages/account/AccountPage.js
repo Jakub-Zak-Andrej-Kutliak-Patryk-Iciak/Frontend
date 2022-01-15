@@ -19,9 +19,9 @@ const AccountPage = ({ user }) => {
       <div className="my-6">
         <strong>{ `${ user.firstName } ${ user.lastName }` }</strong>
       </div>
-      <div className="my-20">
-        Bookings: { user.bookings || 0 }
-      </div>
+      {/*<div className="my-20">*/}
+      {/*  Bookings: { user.bookings || 0 }*/}
+      {/*</div>*/}
       <div className={ 'm-auto my-20 max-w-xs' }>
         <AppButton text={ 'Log out' } action={ logOut }/>
       </div>

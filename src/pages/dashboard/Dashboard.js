@@ -80,7 +80,7 @@ const Dashboard = () => {
       <div className="w-full">
         <Switch>
           <Route path={ "/payment/checkout" } exact
-                 component={ () => itemToBook && <PaymentPage item={ itemToBook }/> }/>
+                 component={ () => itemToBook && <PaymentPage item={ itemToBook } user={user}/> }/>
           <Route path={ "/payment/success" } component={ () => <PaymentSuccessPage/> }/>
           <Route path={ "/account/complete" } exact component={ () => <CompleteAccountPage/> }/>
           <Route path={ "/account" } component={ () => <AccountPage user={ user }/> }/>

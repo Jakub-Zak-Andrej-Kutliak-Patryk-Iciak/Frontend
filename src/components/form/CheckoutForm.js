@@ -97,7 +97,7 @@ const CheckoutForm = ({ clientSecret, item }) => {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `http://localhost:3000/payment/success?geo=${item.location.lat},${item.location.lng}&title=${item.title}&address=${item.location.address}`,
+        return_url: `http://localhost:3000/payment/success?geo=${item.location.lat},${item.location.lng}&title=${item.name}&provider=${item.parkingProvider}`,
       },
     })
 

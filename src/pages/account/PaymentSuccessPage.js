@@ -25,7 +25,7 @@ const PaymentSuccessPage = () => {
     <div className="flex flex-col align-middle justify-center p-3">
       <h1 className="font-bold capitalize">Lets hit the road!</h1>
       <h5 className="capitalize">{ query.get('title') }</h5>
-      <h6 className="capitalize">{ query.get('address') }</h6>
+      <h6 className="capitalize">{ query.get('provider') }</h6>
       <div className="mt-16">
         <a href={`https://www.google.com/maps/search/?api=1&query=${ query.get('geo') }`}
            target={'_blank'}

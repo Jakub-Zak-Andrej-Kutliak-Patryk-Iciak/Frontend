@@ -5,12 +5,13 @@ import CheckoutForm from "../../components/form/CheckoutForm";
 import usePaymentService from "../../services/usePaymentService";
 
 
-const PaymentPage = ({ item }) => {
+const PaymentPage = ({ item, user }) => {
   const [clientSecret, setClientSecret] = useState(null)
   const { stripePromise, createPaymentIntent } = usePaymentService()
 
   useEffect(() => {
-    createPaymentIntent(item, setClientSecret)
+    console.log('user', user)
+    createPaymentIntent({ ...item, description: `Parking spot at ${item.name}`, clientName: user.firstName, email: user.email  }, setClientSecret)
   }, [])
 
   const appearance = {
