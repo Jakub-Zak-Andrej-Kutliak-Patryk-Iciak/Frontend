@@ -6,12 +6,12 @@ const usePaymentService = () => {
   const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PK);
   const testPayload = {
     currency: 'dkk',
-    amount: 15000,
-    description: 'API test'
+    amount: 150000,
+    description: 'API test',
   }
 
   const createPaymentIntent = (payload, callback) => {
-    securedAPI.createPaymentIntent(testPayload)
+    securedAPI.createPaymentIntent({ ...testPayload, ...payload })
       .then(res => res.data)
       .then(data => callback(data.clientSecret))
   }

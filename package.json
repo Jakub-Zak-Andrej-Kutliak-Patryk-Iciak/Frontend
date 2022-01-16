@@ -10,6 +10,7 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "amqplib": "^0.8.0",
     "apisauce": "^2.1.2",
     "firebase": "^9.1.2",
     "google-map-react": "^2.1.10",
@@ -34,7 +35,7 @@
     "test": "craco test",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://localhost:8080",
+  "proxy": "http://localhost:8765",
   "eslintConfig": {
     "extends": [
       "react-app",

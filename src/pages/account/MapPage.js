@@ -7,9 +7,9 @@ import { ParkingLotCard } from "../../components/card";
 import { Icon } from "semantic-ui-react";
 
 
-const MapPage = ({ mapApiKey, items, setItemToBook }) => {
+const MapPage = ({ mapApiKey, defaultCenter, onRefreshRequested, items, setItemToBook }) => {
 
-  const [coordinates, setCoordinates] = useState({ lat: 57.051580, lng: 9.918679 })
+  const [coordinates, setCoordinates] = useState(defaultCenter)
   const [activeItem, setActiveItem] = useState(null)
 
   const [isLoadingCurrentLocation, setLoadingCurrentLocation] = useState(false)
@@ -19,11 +19,13 @@ const MapPage = ({ mapApiKey, items, setItemToBook }) => {
   const [zoom, setZoom] = useState(14)
 
   const setCoordsToCurrentLocation = () => {
-    console.log('loading current location..',)
+    console.log('loading current location..')
     setLoadingCurrentLocation(true)
     navigator.geolocation.getCurrentPosition(({ coords }) => {
-      console.log('current location found: ', coords)
-      setCoordinates({ lat: coords.latitude, lng: coords.longitude })
+      const newCoords = { lat: coords.latitude, lng: coords.longitude }
+      console.log('current location found: ', newCoords)
+      setCoordinates(newCoords)
+      onRefreshRequested(newCoords)
       setLoadingCurrentLocation(false)
     })
   }
@@ -31,6 +33,11 @@ const MapPage = ({ mapApiKey, items, setItemToBook }) => {
   const apiHasLoaded = (map, maps) => {
     setMapInstance(map)
     setMapApi(maps)
+
+    maps.event.addListener(map, "center_changed", () => {
+      const center = { lat: map.center.lat(), lng: map.center.lng() }
+      setCoordinates(center)
+    })
   }
 
   return (
@@ -42,15 +49,24 @@ const MapPage = ({ mapApiKey, items, setItemToBook }) => {
           </div>
         </div>
       }
+      { mapApi && mapInstance && coordinates.lat !== defaultCenter.lat &&
+        <div className="absolute z-20 top-1/5 flex w-full align-middle justify-center">
+          <div className="rounded-2xl h-8 pt-1 w-24 mx-8 bg-amber-600 text-white" onClick={() => onRefreshRequested(coordinates)}>
+            Search
+          </div>
+        </div>
+      }
       <GoogleMap bootstrapURLKeys={ {
         key: mapApiKey,
         libraries: ['places', 'geometry']
       } }
-                 defaultCenter={ coordinates }
+                 defaultCenter={ defaultCenter }
+                 // onDragEnd={() => onCenterChanged({ lat: mapInstance.center.lat(), lng: mapInstance.center.lng() })}
                  defaultZoom={ zoom }
                  yesIWantToUseGoogleMapApiInternals
                  onGoogleApiLoaded={ ({ map, maps }) => apiHasLoaded(map, maps) }
-                 center={ coordinates }
+                 // center={ coordinates }
+
       >
         { items && items.filter(item => item.location).map(item => (
           <Marker key={ item.id }
@@ -85,6 +101,8 @@ const MapPage = ({ mapApiKey, items, setItemToBook }) => {
 
 MapPage.propTypes = {
   mapApiKey: PropTypes.string.isRequired,
+  defaultCenter: PropTypes.object.isRequired,
+  onRefreshRequested: PropTypes.func.isRequired,
   items: PropTypes.array.isRequired,
   setItemToBook: PropTypes.func.isRequired,
 }

@@ -17,6 +17,7 @@ export const initState = {
   },
   preferences: {
     darkmode: false,
+    lastCoords: null,
   },
   testItems: [
     {

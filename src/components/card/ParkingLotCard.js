@@ -6,12 +6,21 @@ import { AppLink } from "../index";
 
 const ParkingLotCard = ({ item, onCancelClick, setItemToBook }) => {
 
+  const status = (total, taken) => {
+    const percentage = (taken / total) * 100.
+    console.log('percentage', percentage)
+    return ((taken / total) * 100).toFixed(2)
+  }
+
   return (
     <Card customStyle="bg-teal-400 relative">
-      <div className="font-bold mb-6">{ item.title }</div>
-      <div>Total spots: { item.totalSpots }</div>
-      <div>Busy: { item.busy }</div>
-      <div>Opening hours: { item.openingHours }</div>
+      <div className="font-bold mb-6">{ item.name }</div>
+      <div className="font-bold mb-6">{ item.parkingProvider }</div>
+      <div>Total spots: { item.capacity }</div>
+      <div>Available: { item.capacity - item.available }</div>
+      <div className="flex aligned-middle justify-center">
+        <div className="rounded-2xl py-2 px-5 bg-amber-500">Busy: { item.busy }</div>
+      </div>
       <div className="mt-2">
         <a href={`https://www.google.com/maps/search/?api=1&query=${item.location.lat},${item.location.lng}`}
            target={'_blank'}
