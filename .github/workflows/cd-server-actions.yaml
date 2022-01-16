@@ -1,0 +1,22 @@
+name: DEV Continous development automation
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Testing ssh connection
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          script: |
+            cd /var/www/my-portfolio
+            git checkout master && git pull
+            yarn deploy
+
