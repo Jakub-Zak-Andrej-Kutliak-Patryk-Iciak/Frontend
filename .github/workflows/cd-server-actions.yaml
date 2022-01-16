@@ -1,22 +1,21 @@
-name: DEV Continous development automation
+name: CI/CD
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
     steps:
-      - name: Testing ssh connection
+      - name: Run via ssh connection
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           script: |
-            cd /var/www/my-portfolio
-            git checkout master && git pull
+            cd /var/www/pakring-app-client
+            git checkout main && git pull
             yarn deploy
-
