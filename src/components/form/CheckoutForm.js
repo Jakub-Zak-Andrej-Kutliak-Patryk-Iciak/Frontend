@@ -9,7 +9,7 @@ import {
 import { Segment, Grid, Loader } from "semantic-ui-react";
 import { AppButton } from "../index";
 import { useHistory } from "react-router-dom";
-import usePaymentService from "../../services/usePaymentService";
+import { LeftBackArrowIcon } from "../icons";
 
 
 const useResponsiveFontSize = () => {
@@ -55,7 +55,7 @@ const useOptions = () => {
 }
 
 
-const CheckoutForm = ({ clientSecret, item }) => {
+const CheckoutForm = ({ clientSecret, item, cancelPayment }) => {
   const stripe = useStripe()
   const elements = useElements()
   const options = useOptions()
@@ -115,6 +115,7 @@ const CheckoutForm = ({ clientSecret, item }) => {
       {stripe && elements ? (
         <form onSubmit={ handleSubmit }>
           <label className={ 'stripe-label' }>
+            <div className="absolute left-2 top-2 p-2" onClick={cancelPayment}><LeftBackArrowIcon color={"orange"} /></div>
             <div className="capitalize">Enter Card details</div>
             <PaymentElement options={ options }
                             onReady={ () => {
@@ -152,6 +153,7 @@ const CheckoutForm = ({ clientSecret, item }) => {
 CheckoutForm.propTypes = {
   clientSecret: PropTypes.string.isRequired,
   item: PropTypes.object.isRequired,
+  cancelPayment: PropTypes.func.isRequired,
 }
 
 export default CheckoutForm

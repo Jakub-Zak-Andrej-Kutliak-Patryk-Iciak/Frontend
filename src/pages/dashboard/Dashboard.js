@@ -25,14 +25,14 @@ const Dashboard = () => {
 
   const { fetchParkingLots, parkingLots } = useParkingService()
 
-  const [activeTab, setActiveTab] = useState(getStoreItem("navbar.activeTab"))
+  // const [activeTab, setActiveTab] = useState(getStoreItem("navbar.activeTab"))
   const [mapApiKey, setMapApiKey] = useState(process.env.REACT_APP_GOOGLE_MAPS_API_KEY)
   const [itemToBook, setItemToBook] = useState(null)
 
   const changeTab = async (tab) => {
     if (NAVBAR_TABS.indexOf(tab) === -1) return
     await setStoreItem("navbar.activeTab", tab);
-    setActiveTab(tab)
+    // setActiveTab(tab)
     push(`/${ tab }`)
   }
 
@@ -80,7 +80,7 @@ const Dashboard = () => {
       <div className="w-full">
         <Switch>
           <Route path={ "/payment/checkout" } exact
-                 component={ () => itemToBook && <PaymentPage item={ itemToBook } user={user}/> }/>
+                 component={ () => itemToBook && <PaymentPage item={ itemToBook } user={user} cancelPayment={() => setItemToBook(null)} /> }/>
           <Route path={ "/payment/success" } component={ () => <PaymentSuccessPage/> }/>
           <Route path={ "/account/complete" } exact component={ () => <CompleteAccountPage/> }/>
           <Route path={ "/account" } component={ () => <AccountPage user={ user }/> }/>
