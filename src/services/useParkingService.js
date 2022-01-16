@@ -34,8 +34,8 @@ const useParkingService = () => {
           if (onResolve) {
             onResolve(data)
           }
-          fetchAds((innerData) => {
-            setResults(parkingData.map(spot => ({
+          fetchAds((adsData) => {
+            const result = parkingData.map(spot => ({
               id: spot.name,
               name: spot.name,
               parkingProvider: spot.parkingProvider,
@@ -46,7 +46,14 @@ const useParkingService = () => {
                 lat: spot.latitude,
                 lng: spot.longitude,
               },
-            })).concat(innerData))
+            }))
+
+            const parkingAmount = result.length
+            for (const ad of adsData) {
+              result.splice(Math.floor(Math.random() * parkingAmount), 0, ad)
+            }
+
+            setResults(result)
           });
           return
         }

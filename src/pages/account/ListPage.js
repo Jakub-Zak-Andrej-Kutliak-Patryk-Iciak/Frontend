@@ -4,7 +4,7 @@ import { AdCard } from "../../components/card";
 
 const ListPage = ({ setItemToBook, items }) => {
 
-  console.log('items', items)
+  // console.log('items', items)
 
   return (
     <div className="my-20 w-full">
